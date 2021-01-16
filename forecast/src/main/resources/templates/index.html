@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:form="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset = "ISO-8859-1" />
+    <link href = "css/styles.css" rel = "stylesheet"/>
+    <title>Weather Forecast Application</title>
+</head>
+<body>
+
+<table>
+    <thead>
+    <tr>
+        <th> Date </th>
+        <th> Minimum Temp </th>
+        <th> Maximum Temp </th>
+        <th> Prediction  </th>
+        <th> Safety </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${forecast.empty}">
+        <td colspan="3"> No Weather Forecast Available </td>
+    </tr>
+    <tr th:each="weather : ${forecast}">
+        <td><span th:text="${weather.date}"> Title </span></td>
+        <td><span th:text="${weather.minTemp}"> Author </span></td>
+        <td><span th:text="${weather.maxTemp}"> Title </span></td>
+        <td><span th:text="${weather.desc}"> Author </span></td>
+        <td><span th:text="${weather.safety}"> Author </span></td>
+    </tr>
+    </tbody>
+</table>
+
+<!--Day 1 : <b th:text="${forecast.listWeather.get(0)}" /><br/>-->
+</body>
+</html>
