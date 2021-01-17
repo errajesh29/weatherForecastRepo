@@ -1,7 +1,7 @@
 node {
     // reference to maven
-    // ** NOTE: This 'maven-3.5.2' Maven tool must be configured in the Jenkins Global Configuration.   
-    def mvnHome = tool 'maven-3.5.2'
+    // ** NOTE: This 'maven-3.6.3' Maven tool must be configured in the Jenkins Global Configuration.
+    def mvnHome = tool 'maven-3.6.3'
     def BUILD_NUMBER = 1.0.0
 
     // holds reference to docker image
@@ -12,11 +12,11 @@ node {
     
     stage('Clone Repo') { // for display purposes
       // Get some code from a GitHub repository
-      git 'https://github.com/felipemeriga/DevOps-Example.git'
+      git 'https://github.com/errajesh29/weatherForecastRepo.git'
       // Get the Maven tool.
-      // ** NOTE: This 'maven-3.5.2' Maven tool must be configured
+      // ** NOTE: This 'maven-3.6.3' Maven tool must be configured
       // **       in the global configuration.           
-      mvnHome = tool 'maven-3.5.2'
+      mvnHome = tool 'maven-3.6.3'
     }    
   
     stage('Build Project') {
@@ -35,14 +35,14 @@ node {
 		
       echo "Docker Image Tag Name: ${dockerImageTag}"
 	  
-	  sh "docker stop forecast"
+	    sh "docker stop forecast"
 	  
-	  sh "docker rm forecast"
+	    sh "docker rm forecast"
 	  
-	  sh "docker run --name forecast -d -p 2222:2222 forecast:${BUILD_NUMBER}"
+	    sh "docker run --name forecast -d -p 3000:3000 forecast:${BUILD_NUMBER}"
 	  
 	  // docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-      //    dockerImage.push("${env.BUILD_NUMBER}")
+      //    dockerImage.push("${BUILD_NUMBER}")
       //      dockerImage.push("latest")
       //  }
       
