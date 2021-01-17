@@ -16,9 +16,10 @@ public class Weather {
     }
 
     public void setMaxTemp(String value) {
-        Double maxt = Double.parseDouble(value);
+        Double maxtemp = Double.parseDouble(value); // in forenhite
+        Double degree = (maxtemp - 32)  * 5/9; // in degree
 
-        if(maxt > 40 ) {
+        if(degree > 40 && safety == null) { // check degree more than 40 , if not already rain set
             safety = "Use sunscreen lotion";
         }
         maxTemp = value;
@@ -29,13 +30,12 @@ public class Weather {
     }
 
     public void setDesc(String value) {
+        if(value.toLowerCase().equals("rain")) {
+            safety = "Carry umbrella";
+        }
         desc = value;
     }
     public String getDesc() {
-        if(desc == "rain") {
-            safety = "Carry umbrella";
-        }
-
         return desc;
     }
 

@@ -31,8 +31,7 @@ node {
    
     stage('Deploy Docker Image'){
       
-      // deploy docker image to nexus
-		
+
       echo "Docker Image Tag Name: ${dockerImageTag}"
 	  
 	    sh "docker stop forecast"

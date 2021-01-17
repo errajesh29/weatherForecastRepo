@@ -21,10 +21,15 @@ public class WeatherController {
 
     @RequestMapping(value = "/{city}")
     public String index(@PathVariable String city, Model model) throws IOException, InterruptedException, ParseException, net.minidev.json.parser.ParseException {
-        //model.addAttribute("cityList" , cityList);
 
-        ForecastModel result = weatherService.getForecastData();
-        model.addAttribute("forecast", result.listWeather);
+        ForecastModel result = weatherService.getForecastData(city);
+        if (result.listWeather == null ) {
+            model.addAttribute("city", "City Not Found");
+            model.addAttribute("error", result.getErrorMessage());
+        } else {
+            model.addAttribute("forecast", result.listWeather);
+            model.addAttribute("city", result.city);
+        }
         return "index";
     }
 }
