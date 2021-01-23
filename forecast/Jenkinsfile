@@ -17,7 +17,17 @@ pipeline {
             steps {
                 echo 'This is a minimal pipeline.'
                 sh 'mvn clean install'
+                def pom = readMavenPom file:'pom.xml'
+                print pom.version
+                env.version = pom.version
+                currentBuild.description = "Release: ${env.version}"
             }
+        }
+        stage('Image') {
+            echo "Docker Image Tag Name: ${env.version}"
+            sh "docker stop forecast"
+            sh "docker rm forecast"
+            sh "docker run --name forecast -d -p 3000:3000 forecast:${env.version}"
         }
     }
 }
