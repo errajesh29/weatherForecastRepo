@@ -1,4 +1,4 @@
-node('dind-node') {
+node {
     stage('Checkout') {
       git url: 'https://github.com/errajesh29/weatherForecastRepo.git'
     }
