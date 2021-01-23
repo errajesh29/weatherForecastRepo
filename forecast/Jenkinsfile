@@ -2,7 +2,7 @@ pipeline {
     agent any
     tools {
         maven 'maven-3.6.3'
-        jdk 'JDK'
+        jdk 'OpenJDK-11'
     }
     stages {
         stage ('Initialize') {
@@ -17,6 +17,7 @@ pipeline {
             steps {
                 echo 'This is a minimal pipeline.'
                 sh 'mvn clean install'
+                sh 'mvn compile'
                 sh 'mvn package'
             }
         }
