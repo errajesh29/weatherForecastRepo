@@ -3,16 +3,13 @@ node {
       git url: 'https://github.com/errajesh29/weatherForecastRepo.git'
     }
     stage('Build') {
-      dir('config-service') {
         sh 'mvn clean install'
         def pom = readMavenPom file:'pom.xml'
         print pom.version
         env.version = pom.version
         currentBuild.description = "Release: ${env.version}"
-      }
     }
     stage('Image') {
-      dir ('config-service') {
         echo "Docker Image Tag Name: ${env.version}"
 
         sh "docker stop forecast"
@@ -20,6 +17,5 @@ node {
         sh "docker rm forecast"
 
         sh "docker run --name forecast -d -p 3000:3000 forecast:${env.version}"
-      }
     }
 }
