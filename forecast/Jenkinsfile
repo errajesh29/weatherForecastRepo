@@ -1,49 +1,25 @@
-node {
-    // reference to maven
-    // ** NOTE: This 'maven-3.6.3' Maven tool must be configured in the Jenkins Global Configuration.
-    def mvnHome = tool 'maven-3.6.3'
-    def BUILD_NUMBER = 1.0.0
-
-    // holds reference to docker image
-    def dockerImage
-    // ip address of the docker private repository(nexus)
- 
-    def dockerImageTag = "forecast${BUILD_NUMBER}"
-    
-    stage('Clone Repo') { // for display purposes
-      // Get some code from a GitHub repository
-      git 'https://github.com/errajesh29/weatherForecastRepo.git'
-      // Get the Maven tool.
-      // ** NOTE: This 'maven-3.6.3' Maven tool must be configured
-      // **       in the global configuration.           
-      mvnHome = tool 'maven-3.6.3'
-    }    
-  
-    stage('Build Project') {
-      // build project via maven
-      sh "'${mvnHome}/bin/mvn' clean install"
+node('dind-node') {
+    stage('Checkout') { # (1)
+      git url: 'https://github.com/errajesh29/weatherForecastRepo.git'
     }
-		
-    stage('Build Docker Image') {
-      // build docker image
-      dockerImage = docker.build("forecast:${BUILD_NUMBER}")
+    stage('Build') { # (2)
+      dir('config-service') {
+        sh 'mvn clean install'
+        def pom = readMavenPom file:'pom.xml'
+        print pom.version
+        env.version = pom.version
+        currentBuild.description = "Release: ${env.version}"
+      }
     }
-   
-    stage('Deploy Docker Image'){
-      
+    stage('Image') {
+      dir ('config-service') {
+        echo "Docker Image Tag Name: ${env.version}"
 
-      echo "Docker Image Tag Name: ${dockerImageTag}"
-	  
-	    sh "docker stop forecast"
-	  
-	    sh "docker rm forecast"
-	  
-	    sh "docker run --name forecast -d -p 3000:3000 forecast:${BUILD_NUMBER}"
-	  
-	  // docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-      //    dockerImage.push("${BUILD_NUMBER}")
-      //      dockerImage.push("latest")
-      //  }
-      
+        sh "docker stop forecast"
+
+        sh "docker rm forecast"
+
+        sh "docker run --name forecast -d -p 3000:3000 forecast:${env.version}"
+      }
     }
 }
