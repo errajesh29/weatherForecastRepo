@@ -17,7 +17,6 @@ pipeline {
             steps {
                 echo 'This is a minimal pipeline.'
                 sh 'mvn clean install'
-                sh 'mvn compile'
                 sh 'mvn package'
             }
         }
