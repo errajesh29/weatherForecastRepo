@@ -1,21 +1,22 @@
-node {
-    stage('Checkout') {
-      echo "get project from git"
+pipeline {
+    agent any
+    tools {
+        maven 'Maven 3.3.9'
+        jdk 'jdk8'
     }
-    stage('Build') {
-        sh 'mvn clean install'
-        def pom = readMavenPom file:'pom.xml'
-        print pom.version
-        env.version = pom.version
-        currentBuild.description = "Release: ${env.version}"
-    }
-    stage('Image') {
-        echo "Docker Image Tag Name: ${env.version}"
-
-        sh "docker stop forecast"
-
-        sh "docker rm forecast"
-
-        sh "docker run --name forecast -d -p 3000:3000 forecast:${env.version}"
+    stages {
+        stage ('Initialize') {
+            steps {
+                sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M2_HOME = ${M2_HOME}"
+                '''
+            }
+        }
+        stage ('Build') {
+            steps {
+                echo 'This is a minimal pipeline.'
+            }
+        }
     }
 }
