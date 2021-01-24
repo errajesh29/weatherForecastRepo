@@ -1,8 +1,6 @@
 pipeline {
     environment {
-        registry = "forecast:latest"
-        registryCredential = 'dockerhub'
-        dockerImage = ''
+      registryCredential = 'dockerhub'
     }
     agent any
     tools {
@@ -18,21 +16,17 @@ pipeline {
                 '''
             }
         }
-        stage('Building image') {
-          steps{
-            script {
-              dockerImage = docker.build registry + " ."
-            }
-          }
-        }
-        stage ('Pushing image') {
+        stage ('Build') {
             steps {
-                echo "Docker Image push forecast:latest"
-                script {
-                  docker.withRegistry( '', registryCredential ) {
-                    dockerImage.push()
-                    sh "docker run --name forecast -d -p 3000:3000 forecast:latest"
-                  }
+                echo 'This is a minimal pipeline.'
+            }
+        }
+        stage ('Image') {
+            steps {
+                echo "Docker Image Tag Name: forecast:latest"
+                sh "docker build -t forecast:latest ."
+                sh 'docker push forecast:latest'
+                sh "docker run --name forecast -d -p 3000:3000 forecast:latest"
             }
         }
     }
