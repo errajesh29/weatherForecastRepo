@@ -25,7 +25,6 @@ pipeline {
             steps {
                 echo "Docker Image Tag Name: forecast:latest"
                 sh "docker build -t forecast:latest ."
-                sh 'docker push forecast:latest'
                 sh "docker run --name forecast -d -p 3000:3000 forecast:latest"
             }
         }
