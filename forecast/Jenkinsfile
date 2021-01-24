@@ -1,4 +1,9 @@
 pipeline {
+    environment {
+        registry = "forecast:latest"
+        registryCredential = 'dockerhub'
+        dockerImage = ''
+    }
     agent any
     tools {
         maven 'maven-3.6.3'
@@ -13,17 +18,21 @@ pipeline {
                 '''
             }
         }
-        stage ('Build') {
-            steps {
-                echo 'This is a minimal pipeline.'
+        stage('Building image') {
+          steps{
+            script {
+              dockerImage = docker.build registry + " ."
             }
+          }
         }
-        stage ('Image') {
+        stage ('Pushing image') {
             steps {
-                echo "Docker Image Tag Name: forecast:latest"
-                sh "docker build -t forecast ."
-                sh 'docker push forecast:latest'
-                sh "docker run --name forecast -d -p 3000:3000 forecast:latest"
+                echo "Docker Image push forecast:latest"
+                script {
+                  docker.withRegistry( '', registryCredential ) {
+                    dockerImage.push()
+                    sh "docker run --name forecast -d -p 3000:3000 forecast:latest"
+                  }
             }
         }
     }
