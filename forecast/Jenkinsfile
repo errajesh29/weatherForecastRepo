@@ -16,12 +16,12 @@ pipeline {
                 '''
             }
         }
-        stage ('Build') {
+        stage ('Build Image') {
             steps {
                 echo 'This is a minimal pipeline.'
             }
         }
-        stage ('Image') {
+        stage ('Deploy Image') {
             steps {
                 echo "Docker Image Tag Name: forecast:latest"
                 sh "docker build -t forecast:latest ."
