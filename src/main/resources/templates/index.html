@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:form="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset = "ISO-8859-1" />
+    <link href = "css/styles.css" rel = "stylesheet"/>
+    <title>Weather Forecast Application</title>
+</head>
+<br>
+Selected City: <span th:text="${city}"></span>
+<br></br>
+</body>
+<table>
+    <thead>
+    <tr>
+        <th> Date Forecast </th>
+        <th> Minimum Temp(F) </th>
+        <th> Maximum Temp(F) </th>
+        <th> Prediction  </th>
+        <th> Safety Note</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${error}">
+        <td colspan="3"> No Weather Forecast Available : "</td>
+        <td colspan="3" ><span style="background:red" th:text="${error}"> </span></td>
+    </tr>
+    <tr th:each="weather : ${forecast}">
+        <td><span th:text="${weather.date}"> Title </span></td>
+        <td><span th:text="${weather.minTemp}"> Author </span></td>
+        <td><span th:text="${weather.maxTemp}"> Title </span></td>
+        <td><span th:text="${weather.desc}"> Author </span></td>
+        <td><span style="background:yellow" th:text="${weather.safety}"> Author </span></td>
+    </tr>
+    </tbody>
+</table>
+
+<!--Day 1 : <b th:text="${forecast.listWeather.get(0)}" /><br/>-->
+</body>
+</html>
